@@ -1,4 +1,5 @@
 import { ShoppingCart } from '@mui/icons-material';
+import { LoadingButton } from '@mui/lab';
 import {
   AppBar,
   Badge,
@@ -11,7 +12,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Link, NavLink } from 'react-router-dom';
-import { useStoreContext } from '../../context/StoreContextValue';
+import { useBasket } from '../../helpers/useBasket';
 
 interface IHeader {
   onThemeChange: () => void;
@@ -41,7 +42,7 @@ const authLinks = [
 ];
 
 export default function Header({ onThemeChange }: IHeader) {
-  const { basket } = useStoreContext();
+  const { data: basket, isLoading } = useBasket();
 
   const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -64,16 +65,17 @@ export default function Header({ onThemeChange }: IHeader) {
           ))}
         </List>
         <Box display="flex" alignItems="center">
-          <IconButton
+          <LoadingButton
             component={Link}
             to="/basket"
             size="large"
             sx={{ color: 'inherit' }}
+            loading={isLoading}
           >
             <Badge badgeContent={itemCount} color="secondary">
               <ShoppingCart />
             </Badge>
-          </IconButton>
+          </LoadingButton>
           <List sx={{ display: 'flex' }}>
             {authLinks.map(({ title, path }) => (
               <ListItem key={path} {...{ component: NavLink, to: path }} sx={navStyles}>

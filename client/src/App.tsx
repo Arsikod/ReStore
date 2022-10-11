@@ -1,6 +1,6 @@
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import { Container } from '@mui/system';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import AboutPage from './features/about/AboutPage';
 import Catalog from './features/catalog/Catalog';
@@ -13,20 +13,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import ServerError from './app/errors/ServerError';
 import NotFound from './app/errors/NotFound';
 import BasketPage from './features/basket/BasketPage';
-import { useStoreContext } from './context/StoreContextValue';
-import { useBasket } from './helpers/useBasket';
-import LoadingComponent from './app/layout/LoadingComponent';
 
 function App() {
-  const { data: basket, isLoading } = useBasket();
-
-  const { setBasket } = useStoreContext();
-
   const [darkMode, setDarkMode] = useState(false);
-
-  useEffect(() => {
-    if (!isLoading && basket) setBasket(basket);
-  }, [isLoading, setBasket, basket]);
 
   const theme = createTheme({
     palette: {
@@ -36,8 +25,6 @@ function App() {
       },
     },
   });
-
-  if (isLoading) return <LoadingComponent message="Loading..." />;
 
   return (
     <ThemeProvider theme={theme}>

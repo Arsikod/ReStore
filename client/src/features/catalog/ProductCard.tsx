@@ -1,3 +1,4 @@
+import { LoadingButton } from '@mui/lab';
 import {
   Avatar,
   Button,
@@ -8,7 +9,9 @@ import {
   Typography,
   CardHeader,
 } from '@mui/material';
+import { useMutation, useQueryClient } from 'react-query';
 import { Link } from 'react-router-dom';
+import agent from '../../app/api/agent';
 import { IProduct } from '../../app/models/product';
 
 interface IProductCard {
@@ -16,7 +19,18 @@ interface IProductCard {
 }
 
 export default function ProductCard({ product }: IProductCard) {
-  const { name, pictureUrl, price, brand, type } = product;
+  const queryClient = useQueryClient();
+  const { name, pictureUrl, price, brand, type, id } = product;
+
+  const { isLoading, mutate } = useMutation(
+    (productId: number) => agent.Basket.addItem(productId),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['basket']);
+      },
+    }
+  );
+
   return (
     <Card>
       <CardHeader
@@ -48,7 +62,9 @@ export default function ProductCard({ product }: IProductCard) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Add to cart</Button>
+        <LoadingButton loading={isLoading} onClick={() => mutate(id)} size="small">
+          Add to cart
+        </LoadingButton>
         <Button size="small" component={Link} to={`/catalog/${product.id}`}>
           Learn More
         </Button>

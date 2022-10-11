@@ -10,16 +10,18 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { useParams } from 'react-router-dom';
+import NotFound from '../../app/errors/NotFound';
+import LoadingComponent from '../../app/layout/LoadingComponent';
 import { useProduct } from '../../helpers/useProduct';
 
 export default function ProductDetails() {
   const { id } = useParams();
   const { isLoading, data: product, isError } = useProduct(id!);
 
-  if (isLoading) return <p>...loading</p>;
+  if (isLoading) return <LoadingComponent message="loading product" />;
 
-  if (isError) {
-    return <div>Product not found</div>;
+  if (!product) {
+    return <NotFound />;
   }
 
   return (

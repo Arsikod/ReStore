@@ -13,6 +13,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import { Link } from 'react-router-dom';
 import agent from '../../app/api/agent';
 import { IProduct } from '../../app/models/product';
+import { currencyFormat } from '../../app/util/util';
 
 interface IProductCard {
   product: IProduct;
@@ -55,7 +56,7 @@ export default function ProductCard({ product }: IProductCard) {
       />
       <CardContent>
         <Typography gutterBottom variant="h5" color="secondary">
-          ${(price / 100).toFixed(2)}
+          {currencyFormat(price)}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           {brand} / {type}

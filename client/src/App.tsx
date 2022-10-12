@@ -13,6 +13,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ServerError from './app/errors/ServerError';
 import NotFound from './app/errors/NotFound';
 import BasketPage from './features/basket/BasketPage';
+import CheckoutPage from './features/checkout/CheckoutPage';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -40,6 +41,7 @@ function App() {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/server-error" element={<ServerError />} />
           <Route path="/basket" element={<BasketPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Container>

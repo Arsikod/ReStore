@@ -1,5 +1,6 @@
 import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
 import { useState } from 'react';
+import CheckboxSkeleton from './CheckboxSkeleton';
 
 interface ICheckboxButtons {
   items: Array<string> | undefined;
@@ -24,6 +25,15 @@ export default function CheckboxButtons({ items, onChange, checked }: ICheckboxB
     setCheckedItems(newChecked);
     onChange(newChecked);
   }
+
+  if (!items)
+    return (
+      <div>
+        {[1, 2, 3, 4, 5].map((v) => (
+          <CheckboxSkeleton key={v} />
+        ))}
+      </div>
+    );
 
   return (
     <FormGroup>

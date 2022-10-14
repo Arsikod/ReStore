@@ -1,12 +1,12 @@
-import { Box, Grid, Pagination, Paper, Typography } from '@mui/material';
+import { Grid, Paper } from '@mui/material';
 import { useState } from 'react';
 import CheckboxButtons from '../../app/components/CheckboxButtons';
 import RadioButtonGroup from '../../app/components/RadioButtonGroup';
-import LoadingComponent from '../../app/layout/LoadingComponent';
 import { useFilters } from '../../helpers/useFilters';
 import { useProductsData } from '../../helpers/useProductData';
 import ProductList from './ProductList';
 import ProductSearch from './ProductSearch';
+import AddPagination from '../../app/components/AppPagination';
 
 const sortOptions = [
   { value: 'name', label: 'Alphabetical' },
@@ -21,68 +21,70 @@ export default function Catalog() {
   const [orderBy, setOrderBy] = useState<string>('');
   const [brands, setBrands] = useState<Array<string>>([]);
   const [types, setTypes] = useState<Array<string>>([]);
+  const [pageNumber, setPageNumber] = useState<number>(1);
 
-  const { isLoading: productsLoading, data: products } = useProductsData({
-    pageNumber: 1,
+  const { isLoading: productsLoading, data } = useProductsData({
+    pageNumber,
     pageSize: 6,
     orderBy: orderBy || 'name',
     searchTerm,
-    brands,
-    types,
+    brands: brands || [],
+    types: types || [],
   });
 
   return (
     <>
-      {productsLoading || filtersLoading ? (
-        <LoadingComponent message="Loading products" />
-      ) : (
-        <Grid container spacing={4}>
-          <Grid item xs={3}>
-            <Paper sx={{ mb: 2 }}>
-              <ProductSearch
-                onChange={(e) => setSearchTerm(e.target.value)} //todo debounce
-                value={searchTerm}
-              />
-            </Paper>
-            <Paper sx={{ mb: 2, p: 2 }}>
-              <RadioButtonGroup
-                options={sortOptions}
-                selectedValue={orderBy}
-                onChange={(e) => setOrderBy(e.target.value)}
-              />
-            </Paper>
+      <Grid container columnSpacing={4}>
+        <Grid item xs={3}>
+          <Paper sx={{ mb: 2 }}>
+            <ProductSearch
+              onChange={(e) => setSearchTerm(e.target.value)} //todo debounce
+              value={searchTerm}
+            />
+          </Paper>
+          <Paper sx={{ mb: 2, p: 2 }}>
+            <RadioButtonGroup
+              options={sortOptions}
+              selectedValue={orderBy}
+              onChange={(e) => setOrderBy(e.target.value)}
+            />
+          </Paper>
 
-            <Paper sx={{ mb: 2, p: 2 }}>
-              <CheckboxButtons
-                checked={brands}
-                items={filters?.brands}
-                onChange={setBrands}
-              />
-            </Paper>
+          <Paper sx={{ mb: 2, p: 2 }}>
+            <CheckboxButtons
+              checked={brands}
+              items={filters?.brands}
+              onChange={(items: Array<string>) => {
+                setBrands(items);
+                setPageNumber(1);
+              }}
+            />
+          </Paper>
 
-            <Paper sx={{ mb: 2, p: 2 }}>
-              <CheckboxButtons
-                checked={types}
-                items={filters?.types}
-                onChange={setTypes}
-              />
-            </Paper>
-          </Grid>
-
-          <Grid item xs={9}>
-            <ProductList products={products} />
-          </Grid>
-
-          <Grid item xs={3} />
-
-          <Grid item xs={9}>
-            <Box display="flex" justifyContent="space-between" alignItems="center">
-              <Typography>Displaying 1-6 of 20 items</Typography>
-              <Pagination color="secondary" size="large" count={10} page={2} />
-            </Box>
-          </Grid>
+          <Paper sx={{ mb: 2, p: 2 }}>
+            <CheckboxButtons
+              checked={types}
+              items={filters?.types}
+              onChange={(items: Array<string>) => {
+                setTypes(items);
+                setPageNumber(1);
+              }}
+            />
+          </Paper>
         </Grid>
-      )}
+
+        <Grid item xs={9}>
+          <ProductList products={data?.items} />
+        </Grid>
+
+        <Grid item xs={3} />
+
+        <Grid item xs={9} sx={{ mb: 2 }}>
+          {data?.metaData && (
+            <AddPagination metaData={data.metaData} onPageChange={setPageNumber} />
+          )}
+        </Grid>
+      </Grid>
     </>
   );
 }

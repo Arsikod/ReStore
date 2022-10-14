@@ -1,3 +1,4 @@
+import { PaginatedResponse } from './../models/pagination';
 import { IFilters } from './../models/filter';
 import { IProduct } from '../models/product';
 import axios, { AxiosError, AxiosResponse } from 'axios';
@@ -13,11 +14,20 @@ interface IResponseData {
   errors?: Record<string, Array<string>>;
 }
 
-const sleep = () => new Promise((resolve) => setTimeout(resolve, 1000));
+const sleep = () => new Promise((resolve) => setTimeout(resolve, 2000));
 
 axios.interceptors.response.use(
   async (response) => {
     await sleep();
+
+    const pagination = response.headers['pagination'];
+
+    if (pagination) {
+      response.data = new PaginatedResponse(response.data, JSON.parse(pagination));
+
+      return response;
+    }
+
     return response;
   },
   (error: AxiosError<IResponseData>) => {
@@ -62,7 +72,7 @@ const requests = {
 };
 
 const Catalog = {
-  products: (params: URLSearchParams): Promise<Array<IProduct>> =>
+  products: (params: URLSearchParams): Promise<PaginatedResponse<Array<IProduct>>> =>
     requests.get('products', params),
   productDetails: (id: string): Promise<IProduct> => requests.get(`products/${id}`),
   filters: (): Promise<IFilters> => requests.get('products/filters'),

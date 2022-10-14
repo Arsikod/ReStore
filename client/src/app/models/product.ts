@@ -14,6 +14,6 @@ export interface IProductParams {
   pageNumber: number;
   pageSize: number;
   searchTerm?: string;
-  types?: Array<string>;
-  brands?: Array<string>;
+  types: Array<string>;
+  brands: Array<string>;
 }

@@ -10,7 +10,7 @@ export default function ProductList({ products }: IProductList) {
   return (
     <Grid container spacing={4}>
       {products?.map((p) => (
-        <Grid item xs={3} key={p.id}>
+        <Grid item xs={4} key={p.id}>
           <ProductCard product={p} />
         </Grid>
       ))}

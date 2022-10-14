@@ -1,3 +1,4 @@
+import { IFilters } from './../models/filter';
 import { IProduct } from '../models/product';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
@@ -53,15 +54,18 @@ axios.interceptors.response.use(
 const responseBody = (response: AxiosResponse) => response.data;
 
 const requests = {
-  get: (url: string) => axios.get(url).then(responseBody),
+  get: (url: string, params?: URLSearchParams) =>
+    axios.get(url, { params }).then(responseBody),
   post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
   put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
   delete: (url: string) => axios.delete(url).then(responseBody),
 };
 
 const Catalog = {
-  products: (): Promise<Array<IProduct>> => requests.get('products'),
+  products: (params: URLSearchParams): Promise<Array<IProduct>> =>
+    requests.get('products', params),
   productDetails: (id: string): Promise<IProduct> => requests.get(`products/${id}`),
+  filters: (): Promise<IFilters> => requests.get('products/filters'),
 };
 
 const TestErrors = {

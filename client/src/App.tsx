@@ -14,6 +14,8 @@ import ServerError from './app/errors/ServerError';
 import NotFound from './app/errors/NotFound';
 import BasketPage from './features/basket/BasketPage';
 import CheckoutPage from './features/checkout/CheckoutPage';
+import Login from './features/account/Login';
+import Register from './features/account/Register';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -42,6 +44,9 @@ function App() {
           <Route path="/server-error" element={<ServerError />} />
           <Route path="/basket" element={<BasketPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Container>

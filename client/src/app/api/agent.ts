@@ -94,10 +94,33 @@ const Basket = {
     requests.delete(`basket?productId=${productId}&quantity=${quantity}`),
 };
 
+export type LoginCredentials = {
+  username: string;
+  password: string;
+};
+
+type LoginResponse = {
+  email: string;
+  token: string;
+};
+
+export type RegisterCredentials = {
+  emai: string;
+} & LoginCredentials;
+
+const Account = {
+  login: (values: LoginCredentials): Promise<LoginResponse> =>
+    requests.post('account/login', values),
+  register: (values: RegisterCredentials): Promise<void> =>
+    requests.post('account/register', values),
+  currentUser: (): Promise<LoginResponse> => requests.get('account/currentuser'),
+};
+
 const agent = {
   Catalog,
   TestErrors,
   Basket,
+  Account,
 };
 
 export default agent;

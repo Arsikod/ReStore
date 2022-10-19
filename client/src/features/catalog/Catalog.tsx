@@ -15,7 +15,7 @@ const sortOptions = [
 ];
 
 export default function Catalog() {
-  const { isLoading: filtersLoading, data: filters } = useFilters();
+  const { data: filters } = useFilters();
 
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [orderBy, setOrderBy] = useState<string>('');
@@ -23,7 +23,7 @@ export default function Catalog() {
   const [types, setTypes] = useState<Array<string>>([]);
   const [pageNumber, setPageNumber] = useState<number>(1);
 
-  const { isLoading: productsLoading, data } = useProductsData({
+  const { data } = useProductsData({
     pageNumber,
     pageSize: 6,
     orderBy: orderBy || 'name',

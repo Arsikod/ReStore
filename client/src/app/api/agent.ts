@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { history } from '../..';
 import { IBasket } from '../models/basket';
 import { User } from '../models/user';
+import { useUserStore } from '../../stores/User';
 
 axios.defaults.baseURL = 'http://localhost:5000/api/';
 axios.defaults.withCredentials = true;
@@ -18,7 +19,7 @@ interface IResponseData {
 const sleep = () => new Promise((resolve) => setTimeout(resolve, 2000));
 
 axios.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
+  const token = useUserStore.getState().user?.token;
 
   if (token) config.headers!.Authorization = `Bearer ${token}`;
 

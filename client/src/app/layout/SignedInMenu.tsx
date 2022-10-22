@@ -1,11 +1,11 @@
 import { Button, Menu, Fade, MenuItem } from '@mui/material';
 import React from 'react';
 import { history } from '../..';
-import { useUserContext } from '../../context/UserContext';
+import { useUserStore } from '../../stores/User';
 import { User } from '../models/user';
 
 export default function SignedInMenu({ user }: { user: User }) {
-  const { removeUser } = useUserContext();
+  const removeUser = useUserStore((state) => state.removeUser);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -30,7 +30,6 @@ export default function SignedInMenu({ user }: { user: User }) {
         <MenuItem onClick={handleClose}>My orders</MenuItem>
         <MenuItem
           onClick={() => {
-            localStorage.removeItem('token');
             removeUser();
             history.push('/');
             handleClose();

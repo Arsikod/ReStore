@@ -5,7 +5,6 @@ import { unstable_HistoryRouter as HistoryRouter } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import { StoreProvider } from './context/StoreContextValue';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import UserProvider from './context/UserContext';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,11 +23,9 @@ root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <HistoryRouter history={history}>
-        <UserProvider>
-          <StoreProvider>
-            <App />
-          </StoreProvider>
-        </UserProvider>
+        <StoreProvider>
+          <App />
+        </StoreProvider>
       </HistoryRouter>
     </QueryClientProvider>
   </React.StrictMode>

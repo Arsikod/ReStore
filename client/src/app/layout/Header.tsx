@@ -11,8 +11,8 @@ import {
   Typography,
 } from '@mui/material';
 import { Link, NavLink } from 'react-router-dom';
-import { useUserContext } from '../../context/UserContext';
 import { useBasket } from '../../helpers/useBasket';
+import { useUserStore } from '../../stores/User';
 import SignedInMenu from './SignedInMenu';
 
 interface IHeader {
@@ -43,7 +43,7 @@ const authLinks = [
 ];
 
 export default function Header({ onThemeChange }: IHeader) {
-  const { user } = useUserContext();
+  const user = useUserStore((state) => state.user);
   const { data: basket, isLoading } = useBasket();
 
   const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);

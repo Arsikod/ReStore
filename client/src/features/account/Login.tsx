@@ -12,17 +12,17 @@ import agent, { LoginCredentials } from '../../app/api/agent';
 import { LoadingButton } from '@mui/lab';
 import { history } from '../..';
 import { useMutation } from 'react-query';
-import { useUserContext } from '../../context/UserContext';
+import { useUserStore } from '../../stores/User';
 
 export default function Login() {
-  const { addUser } = useUserContext();
+  const setUser = useUserStore((state) => state.setUser);
+
   const { mutate: login, isLoading } = useMutation(
     (values: LoginCredentials) => agent.Account.login(values),
     {
       onSuccess: (user) => {
         if (user) {
-          localStorage.setItem('token', user.token);
-          addUser(user);
+          setUser(user);
           history.push('/catalog');
         }
       },

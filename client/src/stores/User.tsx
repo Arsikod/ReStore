@@ -2,9 +2,24 @@ import create from 'zustand';
 import { persist } from 'zustand/middleware';
 import { User } from '../app/models/user';
 
+interface UserStore {
+  user: User | null;
+  setUser: (user: User) => void;
+  removeUser: () => void;
+}
+
 export const useUserStore = create(
-  persist(() => ({
+  persist<UserStore>((set) => ({
     user: null,
-    addUser: (user: User) => ({ user }),
+    setUser: (user: User) => {
+      set({
+        user,
+      });
+    },
+    removeUser: () => {
+      set({
+        user: null,
+      });
+    },
   }))
 );

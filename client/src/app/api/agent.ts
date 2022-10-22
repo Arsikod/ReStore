@@ -5,6 +5,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
 import { history } from '../..';
 import { IBasket } from '../models/basket';
+import { User } from '../models/user';
 
 axios.defaults.baseURL = 'http://localhost:5000/api/';
 axios.defaults.withCredentials = true;
@@ -15,6 +16,14 @@ interface IResponseData {
 }
 
 const sleep = () => new Promise((resolve) => setTimeout(resolve, 2000));
+
+axios.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+
+  if (token) config.headers!.Authorization = `Bearer ${token}`;
+
+  return config;
+});
 
 axios.interceptors.response.use(
   async (response) => {
@@ -48,7 +57,7 @@ axios.interceptors.response.use(
         toast.error(data.title);
         break;
       case 401:
-        toast.error(data.title);
+        toast.error(data.title || 'Unauthorized');
         break;
       case 500:
         history.push('/server-error', { error: data });
@@ -99,21 +108,16 @@ export type LoginCredentials = {
   password: string;
 };
 
-type LoginResponse = {
-  email: string;
-  token: string;
-};
-
 export type RegisterCredentials = {
   emai: string;
 } & LoginCredentials;
 
 const Account = {
-  login: (values: LoginCredentials): Promise<LoginResponse> =>
+  login: (values: LoginCredentials): Promise<User> =>
     requests.post('account/login', values),
   register: (values: RegisterCredentials): Promise<void> =>
     requests.post('account/register', values),
-  currentUser: (): Promise<LoginResponse> => requests.get('account/currentuser'),
+  currentUser: (): Promise<User> => requests.get('account/currentuser'),
 };
 
 const agent = {

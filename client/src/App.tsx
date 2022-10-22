@@ -16,6 +16,7 @@ import BasketPage from './features/basket/BasketPage';
 import CheckoutPage from './features/checkout/CheckoutPage';
 import Login from './features/account/Login';
 import Register from './features/account/Register';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -50,6 +51,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Container>
+      <ReactQueryDevtools />
     </ThemeProvider>
   );
 }

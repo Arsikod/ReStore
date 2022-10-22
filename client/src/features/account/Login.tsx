@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
@@ -8,15 +7,35 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Paper } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { useLogin } from '../../helpers/useLogin';
 import { useForm } from 'react-hook-form';
-import { LoginCredentials } from '../../app/api/agent';
+import agent, { LoginCredentials } from '../../app/api/agent';
 import { LoadingButton } from '@mui/lab';
+import { history } from '../..';
+import { useMutation } from 'react-query';
+import { useUserContext } from '../../context/UserContext';
 
 export default function Login() {
-  const { mutate: login, isLoading } = useLogin();
+  const { addUser } = useUserContext();
+  const { mutate: login, isLoading } = useMutation(
+    (values: LoginCredentials) => agent.Account.login(values),
+    {
+      onSuccess: (user) => {
+        if (user) {
+          localStorage.setItem('token', user.token);
+          addUser(user);
+          history.push('/catalog');
+        }
+      },
+    }
+  );
 
-  const { register, handleSubmit } = useForm<LoginCredentials>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm<LoginCredentials>({
+    mode: 'all',
+  });
 
   function submitForm(data: LoginCredentials) {
     login(data);
@@ -35,13 +54,24 @@ export default function Login() {
         Sign in
       </Typography>
       <Box component="form" onSubmit={handleSubmit(submitForm)} noValidate sx={{ mt: 1 }}>
-        <TextField margin="normal" fullWidth label="Username" {...register('username')} />
+        <TextField
+          margin="normal"
+          fullWidth
+          label="Username"
+          {...register('username', { required: 'Username is required' })}
+          error={Boolean(errors.username)}
+          helperText={errors.username?.message}
+        />
         <TextField
           margin="normal"
           fullWidth
           label="Password"
           type="password"
-          {...register('password')}
+          {...register('password', {
+            required: 'Password is required',
+          })}
+          error={Boolean(errors.password)}
+          helperText={errors.password?.message}
         />
 
         <LoadingButton
@@ -50,6 +80,7 @@ export default function Login() {
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
+          disabled={!isValid}
         >
           Sign In
         </LoadingButton>

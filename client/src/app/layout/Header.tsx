@@ -4,7 +4,6 @@ import {
   AppBar,
   Badge,
   Box,
-  IconButton,
   List,
   ListItem,
   Switch,
@@ -12,7 +11,9 @@ import {
   Typography,
 } from '@mui/material';
 import { Link, NavLink } from 'react-router-dom';
+import { useUserContext } from '../../context/UserContext';
 import { useBasket } from '../../helpers/useBasket';
+import SignedInMenu from './SignedInMenu';
 
 interface IHeader {
   onThemeChange: () => void;
@@ -42,6 +43,7 @@ const authLinks = [
 ];
 
 export default function Header({ onThemeChange }: IHeader) {
+  const { user } = useUserContext();
   const { data: basket, isLoading } = useBasket();
 
   const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
@@ -76,13 +78,17 @@ export default function Header({ onThemeChange }: IHeader) {
               <ShoppingCart />
             </Badge>
           </LoadingButton>
-          <List sx={{ display: 'flex' }}>
-            {authLinks.map(({ title, path }) => (
-              <ListItem key={path} {...{ component: NavLink, to: path }} sx={navStyles}>
-                {title.toUpperCase()}
-              </ListItem>
-            ))}
-          </List>
+          {user ? (
+            <SignedInMenu user={user} />
+          ) : (
+            <List sx={{ display: 'flex' }}>
+              {authLinks.map(({ title, path }) => (
+                <ListItem key={path} {...{ component: NavLink, to: path }} sx={navStyles}>
+                  {title.toUpperCase()}
+                </ListItem>
+              ))}
+            </List>
+          )}
         </Box>
       </Toolbar>
     </AppBar>

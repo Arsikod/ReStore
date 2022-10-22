@@ -7,7 +7,6 @@ import { history } from '../..';
 import { IBasket } from '../models/basket';
 import { User } from '../models/user';
 import { useUserStore } from '../../stores/User';
-import { UseMutationResult } from 'react-query';
 
 axios.defaults.baseURL = 'http://localhost:5000/api/';
 axios.defaults.withCredentials = true;

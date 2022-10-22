@@ -1,10 +1,13 @@
 import { Button, Menu, Fade, MenuItem } from '@mui/material';
 import React from 'react';
+import { useQueryClient } from 'react-query';
 import { history } from '../..';
 import { useUserStore } from '../../stores/User';
 import { User } from '../models/user';
 
 export default function SignedInMenu({ user }: { user: User }) {
+  const queryClient = useQueryClient();
+
   const removeUser = useUserStore((state) => state.removeUser);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -31,6 +34,7 @@ export default function SignedInMenu({ user }: { user: User }) {
         <MenuItem
           onClick={() => {
             removeUser();
+            queryClient.removeQueries('basket');
             history.push('/');
             handleClose();
           }}

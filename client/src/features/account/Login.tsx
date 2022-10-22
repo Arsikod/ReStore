@@ -11,18 +11,22 @@ import { useForm } from 'react-hook-form';
 import agent, { LoginCredentials } from '../../app/api/agent';
 import { LoadingButton } from '@mui/lab';
 import { history } from '../..';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { useUserStore } from '../../stores/User';
 
 export default function Login() {
+  const queryClient = useQueryClient();
   const setUser = useUserStore((state) => state.setUser);
 
   const { mutate: login, isLoading } = useMutation(
     (values: LoginCredentials) => agent.Account.login(values),
     {
-      onSuccess: (user) => {
+      onSuccess: (userDto) => {
+        const { basket, ...user } = userDto;
+
         if (user) {
           setUser(user);
+          queryClient.setQueryData('basket', () => basket);
           history.push('/catalog');
         }
       },

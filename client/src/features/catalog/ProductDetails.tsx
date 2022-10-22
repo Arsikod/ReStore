@@ -21,7 +21,7 @@ import { useProduct } from '../../helpers/useProduct';
 
 export default function ProductDetails() {
   const { id } = useParams();
-  const { isLoading, data: product, isError } = useProduct(id!);
+  const { isLoading, data: product } = useProduct(id!);
 
   const [quantity, setQuantity] = useState<number>(0);
 

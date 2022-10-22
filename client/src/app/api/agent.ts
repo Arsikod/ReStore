@@ -7,6 +7,7 @@ import { history } from '../..';
 import { IBasket } from '../models/basket';
 import { User } from '../models/user';
 import { useUserStore } from '../../stores/User';
+import { UseMutationResult } from 'react-query';
 
 axios.defaults.baseURL = 'http://localhost:5000/api/';
 axios.defaults.withCredentials = true;
@@ -110,14 +111,13 @@ export type LoginCredentials = {
 };
 
 export type RegisterCredentials = {
-  emai: string;
+  email: string;
 } & LoginCredentials;
 
 const Account = {
   login: (values: LoginCredentials): Promise<User> =>
     requests.post('account/login', values),
-  register: (values: RegisterCredentials): Promise<void> =>
-    requests.post('account/register', values),
+  register: (values: RegisterCredentials) => requests.post('account/register', values),
   currentUser: (): Promise<User> => requests.get('account/currentuser'),
 };
 

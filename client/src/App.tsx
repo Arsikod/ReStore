@@ -17,8 +17,11 @@ import CheckoutPage from './features/checkout/CheckoutPage';
 import Login from './features/account/Login';
 import Register from './features/account/Register';
 import { ReactQueryDevtools } from 'react-query/devtools';
+import ProtectedRoute from './app/layout/ProtectedRoute';
+import { useUserStore } from './stores/User';
 
 function App() {
+  const user = useUserStore((state) => state.user);
   const [darkMode, setDarkMode] = useState(false);
 
   const theme = createTheme({
@@ -44,7 +47,16 @@ function App() {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/server-error" element={<ServerError />} />
           <Route path="/basket" element={<BasketPage />} />
-          <Route path="/checkout" element={<CheckoutPage />} />
+
+          <Route
+            path="/checkout"
+            element={
+              <ProtectedRoute isAllowed={Boolean(user)}>
+                <CheckoutPage />
+              </ProtectedRoute>
+            }
+          />
+
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 

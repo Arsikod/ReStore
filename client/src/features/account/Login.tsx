@@ -6,15 +6,16 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Paper } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import agent, { LoginCredentials } from '../../app/api/agent';
 import { LoadingButton } from '@mui/lab';
-import { history } from '../..';
 import { useMutation, useQueryClient } from 'react-query';
 import { useUserStore } from '../../stores/User';
 
 export default function Login() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const queryClient = useQueryClient();
   const setUser = useUserStore((state) => state.setUser);
 
@@ -27,7 +28,9 @@ export default function Login() {
         if (user) {
           setUser(user);
           queryClient.setQueryData('basket', () => basket);
-          history.push('/catalog');
+
+          const from = location.state?.from?.pathname || '/';
+          navigate(from, { replace: true });
         }
       },
     }

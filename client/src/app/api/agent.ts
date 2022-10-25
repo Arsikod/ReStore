@@ -7,6 +7,7 @@ import { history } from '../..';
 import { IBasket } from '../models/basket';
 import { User } from '../models/user';
 import { useUserStore } from '../../stores/User';
+import { Order, OrderDto } from '../models/order';
 
 axios.defaults.baseURL = 'http://localhost:5000/api/';
 axios.defaults.withCredentials = true;
@@ -118,6 +119,13 @@ const Account = {
     requests.post('account/login', values),
   register: (values: RegisterCredentials) => requests.post('account/register', values),
   currentUser: (): Promise<User> => requests.get('account/currentuser'),
+  savedAddress: () => requests.get('account/savedAddress'),
+};
+
+const Orders = {
+  get: (): Promise<Array<OrderDto>> => requests.get('orders'),
+  getById: (id: string | undefined): Promise<OrderDto> => requests.get(`orders/${id}`),
+  create: (order: Order): Promise<number> => requests.post('orders', order),
 };
 
 const agent = {
@@ -125,6 +133,7 @@ const agent = {
   TestErrors,
   Basket,
   Account,
+  Orders,
 };
 
 export default agent;

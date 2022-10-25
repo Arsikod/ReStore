@@ -1,6 +1,7 @@
 import { Button, Menu, Fade, MenuItem } from '@mui/material';
 import React from 'react';
 import { useQueryClient } from 'react-query';
+import { Link } from 'react-router-dom';
 import { history } from '../..';
 import { useUserStore } from '../../stores/User';
 import { User } from '../models/user';
@@ -30,7 +31,9 @@ export default function SignedInMenu({ user }: { user: User }) {
         TransitionComponent={Fade}
       >
         <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My orders</MenuItem>
+        <MenuItem component={Link} to="/orders" onClick={handleClose}>
+          My orders
+        </MenuItem>
         <MenuItem
           onClick={() => {
             removeUser();

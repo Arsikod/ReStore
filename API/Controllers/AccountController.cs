@@ -89,7 +89,18 @@ namespace API.Controllers
                 Token = await _tokenService.GenerateToken(user),
                 Basket = userBasket?.MapBasketToDto()
             };
+        }
 
+        [Authorize]
+        [HttpGet("savedAddress")]
+        public async Task<ActionResult<UserAddress>> GetSaveAddress()
+        {
+            var result = await _userManager.Users
+                                     .Where(x => x.UserName == User.Identity.Name)
+                                     .Select(user => user.Address)
+                                     .FirstOrDefaultAsync();
+
+            return result;
         }
 
         private async Task<Basket> RetrieveBasket(string buyerId)

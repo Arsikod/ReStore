@@ -69,7 +69,7 @@ namespace API
             services.AddIdentityCore<User>(options =>
             {
                 options.User.RequireUniqueEmail = true;
-            }).AddRoles<IdentityRole>().AddEntityFrameworkStores<StoreContext>();
+            }).AddRoles<Role>().AddEntityFrameworkStores<StoreContext>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {

@@ -19,6 +19,8 @@ import Register from './features/account/Register';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import ProtectedRoute from './app/layout/ProtectedRoute';
 import { useUserStore } from './stores/User';
+import Order from './features/orders/Orders';
+import OrderDetail from './features/orders/OrderDetail';
 
 function App() {
   const user = useUserStore((state) => state.user);
@@ -53,6 +55,24 @@ function App() {
             element={
               <ProtectedRoute isAllowed={Boolean(user)}>
                 <CheckoutPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/orders"
+            element={
+              <ProtectedRoute isAllowed={Boolean(user)}>
+                <Order />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/orders/:orderId"
+            element={
+              <ProtectedRoute isAllowed={Boolean(user)}>
+                <OrderDetail />
               </ProtectedRoute>
             }
           />

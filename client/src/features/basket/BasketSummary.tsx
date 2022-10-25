@@ -9,7 +9,7 @@ import {
 import { IBasket } from '../../app/models/basket';
 import { currencyFormat } from '../../app/util/util';
 
-export default function BasketSummary({ basket }: { basket: IBasket }) {
+export default function BasketSummary({ basket }: { basket: IBasket | undefined }) {
   const subtotal =
     basket?.items.reduce((sum, item) => sum + item.quantity * item.price, 0) ?? 0;
   const deliveryFee = subtotal > 10_000 ? 0 : 500;

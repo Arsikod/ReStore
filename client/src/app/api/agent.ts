@@ -17,7 +17,7 @@ interface IResponseData {
   errors?: Record<string, Array<string>>;
 }
 
-const sleep = () => new Promise((resolve) => setTimeout(resolve, 2000));
+const sleep = () => new Promise((resolve) => setTimeout(resolve, 500));
 
 axios.interceptors.request.use((config) => {
   const token = useUserStore.getState().user?.token;
@@ -128,12 +128,17 @@ const Orders = {
   create: (order: Order): Promise<number> => requests.post('orders', order),
 };
 
+const Payments = {
+  createPaymentIntet: () => requests.post('payments', {}),
+};
+
 const agent = {
   Catalog,
   TestErrors,
   Basket,
   Account,
   Orders,
+  Payments,
 };
 
 export default agent;

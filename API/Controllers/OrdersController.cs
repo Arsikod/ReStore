@@ -78,7 +78,8 @@ namespace API.Controllers
                 BuyerId = User.Identity.Name,
                 ShippingAddress = orderDto.ShippingAddress,
                 Subtotal = subtotal,
-                DeliveryFee = deliveryFee
+                DeliveryFee = deliveryFee,
+                PaymentIntentId = basket.PaymentIntentId
             };
 
             _context.Orders.Add(order);
@@ -101,7 +102,7 @@ namespace API.Controllers
                     Country = orderDto.ShippingAddress.Country,
                 };
 
-               user.Address = address;
+                user.Address = address;
             }
 
             var result = await _context.SaveChangesAsync() > 0;

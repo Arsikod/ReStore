@@ -13,7 +13,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import ServerError from './app/errors/ServerError';
 import NotFound from './app/errors/NotFound';
 import BasketPage from './features/basket/BasketPage';
-import CheckoutPage from './features/checkout/CheckoutPage';
 import Login from './features/account/Login';
 import Register from './features/account/Register';
 import { ReactQueryDevtools } from 'react-query/devtools';
@@ -21,6 +20,7 @@ import ProtectedRoute from './app/layout/ProtectedRoute';
 import { useUserStore } from './stores/User';
 import Order from './features/orders/Orders';
 import OrderDetail from './features/orders/OrderDetail';
+import CheckoutWrapper from './features/checkout/CheckoutWrapper';
 
 function App() {
   const user = useUserStore((state) => state.user);
@@ -54,7 +54,7 @@ function App() {
             path="/checkout"
             element={
               <ProtectedRoute isAllowed={Boolean(user)}>
-                <CheckoutPage />
+                <CheckoutWrapper />
               </ProtectedRoute>
             }
           />

@@ -32,9 +32,10 @@ const navStyles = {
 };
 
 const pageLinks = [
-  { title: 'about', path: '/about' },
-  { title: 'catalog', path: '/catalog' },
-  { title: 'contact', path: '/contact' },
+  { title: 'about', path: '/about', roles: 'Member' },
+  { title: 'catalog', path: '/catalog', roles: 'Member' },
+  { title: 'contact', path: '/contact', roles: 'Member' },
+  { title: 'inventory', path: '/inventory', roles: 'Admin' },
 ];
 
 const authLinks = [
@@ -45,6 +46,7 @@ const authLinks = [
 export default function Header({ onThemeChange }: IHeader) {
   const user = useUserStore((state) => state.user);
   const { data: basket, isLoading } = useBasket();
+  const userRoles = useUserStore((state) => state.roles);
 
   const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -60,11 +62,15 @@ export default function Header({ onThemeChange }: IHeader) {
           <Switch onChange={onThemeChange} />
         </Box>
         <List sx={{ display: 'flex' }}>
-          {pageLinks.map(({ title, path }) => (
-            <ListItem key={path} {...{ component: NavLink, to: path }} sx={navStyles}>
-              {title.toUpperCase()}
-            </ListItem>
-          ))}
+          {pageLinks.map(({ title, path, roles }) => {
+            if (userRoles?.includes(roles)) {
+              return (
+                <ListItem key={path} {...{ component: NavLink, to: path }} sx={navStyles}>
+                  {title.toUpperCase()}
+                </ListItem>
+              );
+            }
+          })}
         </List>
         <Box display="flex" alignItems="center">
           <LoadingButton

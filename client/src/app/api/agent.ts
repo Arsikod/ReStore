@@ -80,10 +80,39 @@ const requests = {
   post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
   put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
   delete: (url: string) => axios.delete(url).then(responseBody),
+  postForm: (url: string, data: FormData) =>
+    axios
+      .post(url, data, {
+        headers: { 'Content-type': 'multipart/form-data' },
+      })
+      .then(responseBody),
+  putForm: (url: string, data: FormData) =>
+    axios
+      .put(url, data, {
+        headers: { 'Content-type': 'multipart/form-data' },
+      })
+      .then(responseBody),
+};
+
+function createFormData(item: any) {
+  const formData = new FormData();
+  for (const key in item) {
+    if (item.hasOwnProperty(key)) {
+      formData.append(key, item[key]);
+    }
+  }
+  return formData;
+}
+
+const Admin = {
+  createProduct: (product: any) => requests.post('products', createFormData(product)),
+  updateProduct: (product: any) =>
+    requests.putForm(`products/${product.id}`, createFormData(product)),
+  deleteProduct: (id: string) => requests.delete(`products/${id}`),
 };
 
 const Catalog = {
-  products: (params: URLSearchParams): Promise<PaginatedResponse<Array<IProduct>>> =>
+  products: (params?: URLSearchParams): Promise<PaginatedResponse<Array<IProduct>>> =>
     requests.get('products', params),
   productDetails: (id: string): Promise<IProduct> => requests.get(`products/${id}`),
   filters: (): Promise<IFilters> => requests.get('products/filters'),
@@ -139,6 +168,7 @@ const agent = {
   Account,
   Orders,
   Payments,
+  Admin,
 };
 
 export default agent;

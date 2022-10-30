@@ -21,9 +21,12 @@ import { useUserStore } from './stores/User';
 import Order from './features/orders/Orders';
 import OrderDetail from './features/orders/OrderDetail';
 import CheckoutWrapper from './features/checkout/CheckoutWrapper';
+import Inventory from './features/admin/Inventory';
 
 function App() {
   const user = useUserStore((state) => state.user);
+  const roles = useUserStore((state) => state.roles);
+
   const [darkMode, setDarkMode] = useState(false);
 
   const theme = createTheme({
@@ -73,6 +76,15 @@ function App() {
             element={
               <ProtectedRoute isAllowed={Boolean(user)}>
                 <OrderDetail />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/inventory"
+            element={
+              <ProtectedRoute isAllowed={Boolean(roles?.includes('Admin'))}>
+                <Inventory />
               </ProtectedRoute>
             }
           />

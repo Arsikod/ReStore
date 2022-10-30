@@ -26,10 +26,10 @@ export default function Catalog() {
   const { data } = useProductsData({
     pageNumber,
     pageSize: 6,
-    orderBy: orderBy || 'name',
+    orderBy: orderBy,
     searchTerm,
-    brands: brands || [],
-    types: types || [],
+    brands: brands,
+    types: types,
   });
 
   return (

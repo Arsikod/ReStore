@@ -10,10 +10,10 @@ export interface IProduct {
 }
 
 export interface IProductParams {
-  orderBy: string;
+  orderBy?: string;
   pageNumber: number;
-  pageSize: number;
+  pageSize?: number;
   searchTerm?: string;
-  types: Array<string>;
-  brands: Array<string>;
+  types?: Array<string>;
+  brands?: Array<string>;
 }

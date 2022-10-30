@@ -26,7 +26,12 @@ export default function Login() {
         const { basket, ...user } = userDto;
 
         if (user) {
-          setUser(user);
+          let claims = JSON.parse(atob(user.token.split('.')[1]));
+          let roles = [].concat(
+            claims['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
+          );
+
+          setUser(user, roles);
           queryClient.setQueryData('basket', () => basket);
 
           const from = location.state?.from?.pathname || '/';
